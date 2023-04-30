@@ -13,4 +13,11 @@ export class UsersService {
   async findOne(username: string): Promise<User | undefined> {
     return this.usersRepository.findOneBy({ username });
   }
+
+  async create(username: string, password: string): Promise<User> {
+    const user = new User();
+    user.username = username;
+    user.password = password;
+    return this.usersRepository.save(user);
+  }
 }
