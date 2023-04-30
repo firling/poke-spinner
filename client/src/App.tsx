@@ -1,7 +1,8 @@
 import { AuthInit, useAuth } from './context/auth/AuthProvider';
-import { Home } from './pages/Home';
 import {Routes, Route, BrowserRouter, Navigate} from 'react-router-dom'
 import { Login } from './pages/auth/Login';
+import { PrivateRoutes } from './routing/PrivateRoutes';
+import './App.css';
 
 function App() {
   const {currentUser} = useAuth()
@@ -13,8 +14,7 @@ function App() {
           <Route path='logout' element={<Logout />} /> */}
           {currentUser ? (
             <>
-              <Route path='/' element={<Home />} />
-              <Route path='*' element={<Navigate to='/' />} />
+              <Route path='/*' element={<PrivateRoutes />} />
             </>
           ) : (
             <>
