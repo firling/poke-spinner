@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { UserPoke } from './userPoke.entity';
 
 @Entity()
 export class User {
@@ -10,4 +11,10 @@ export class User {
 
   @Column()
   password: string;
+
+  @Column()
+  level: number;
+
+  @OneToMany(() => UserPoke, userPoke => userPoke.user)
+  public userPokes: UserPoke[];
 }

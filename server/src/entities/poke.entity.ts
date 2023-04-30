@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { UserPoke } from './userPoke.entity';
 
 @Entity()
 export class Poke {
@@ -21,8 +22,9 @@ export class Poke {
   @Column()
   baseSpeed: number;
 
-  
-
   @Column()
   pokedexId: number;
+
+  @OneToMany(() => UserPoke, userPoke => userPoke.poke)
+  public userPokes: UserPoke[];
 }

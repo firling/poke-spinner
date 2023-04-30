@@ -11,7 +11,14 @@ export class UsersService {
   ) {}
 
   async findOne(username: string): Promise<User | undefined> {
-    return this.usersRepository.findOneBy({ username });
+    return this.usersRepository.findOneBy({ username })
+  }
+
+  async findOneWithPoke(username: string): Promise<User | undefined> {
+    return this.usersRepository.findOne({
+      where: { username },
+      relations: ['userPokes', 'userPokes.poke'],
+    })
   }
 
   async create(username: string, password: string): Promise<User> {
