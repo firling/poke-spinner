@@ -1,5 +1,6 @@
 body, html, #root {
     height: 100%;
     margin: 0;
-    background-color: #42f557;
+    background-image: url('/background.png');
+    background-position: center;
 }

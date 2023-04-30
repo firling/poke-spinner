@@ -7,8 +7,6 @@ import {
   Paper,
   Group,
   Button,
-  Divider,
-  Checkbox,
   Anchor,
   Stack,
   Container,

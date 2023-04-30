@@ -10,7 +10,7 @@ const Layout = () => {
             text: "Maison"
         },
         {
-            path: "/profil",
+            path: "/trainer",
             text: "Dresseur"
         },
         {
@@ -20,7 +20,7 @@ const Layout = () => {
     ]
     
   return (
-    <Grid gutter={20} sx={{ margin: 0, height: "100%" }}>
+    <Grid gutter={30} sx={{ margin: 0, height: "100%" }}>
       <Grid.Col lg={3} md={4}>
         <Paper
           radius="md"
@@ -28,7 +28,7 @@ const Layout = () => {
           shadow="xl"
           sx={{
             height: "100%",
-            backgroundColor: "#0d7319",
+            backgroundColor: "#00000033",
             color: "#fff",
           }}
         >
