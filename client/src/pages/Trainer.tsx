@@ -1,14 +1,15 @@
 import { Grid, Paper } from "@mantine/core";
 import { Stuff } from "../components/Trainer/Stuff";
 import { Inventory } from "../components/Trainer/Inventory";
-import { useQuery } from "react-query";
-import { getInventory } from "../api/users";
+import { useMutation, useQuery } from "react-query";
+import { getInventory, updateUserPoke } from "../api/users";
 import { useEffect } from "react";
 import { useListState } from "@mantine/hooks";
 import { IUserPoke } from "../@types/poke";
 
 export function Trainer() {
     const { data } = useQuery('inventory', getInventory)
+    const { mutate: syncUserPoke } = useMutation('update-inventory', updateUserPoke)
 
     const [userPokes, handlers] = useListState<IUserPoke>([])
 
@@ -23,14 +24,20 @@ export function Trainer() {
             (applyItem) => 
                 (applyItem.position === destPosition && applyItem.isEquipped === isDestStuff)
                 || (applyItem.position === item.position && applyItem.isEquipped === item.isEquipped),
-            (applyItem) => ({ 
-                ...applyItem, 
-                position: applyItem.position === sourcePosition ? destPosition : sourcePosition,
-                isEquipped: 
-                    applyItem.position === sourcePosition 
-                    && applyItem.isEquipped === item.isEquipped 
-                    ? isDestStuff : item.isEquipped,
-            })
+            (applyItem) => {
+                const newItem = { 
+                    ...applyItem, 
+                    position: applyItem.position === sourcePosition ? destPosition : sourcePosition,
+                    isEquipped: 
+                        applyItem.position === sourcePosition 
+                        && applyItem.isEquipped === item.isEquipped 
+                        ? isDestStuff : item.isEquipped,
+                }
+
+                syncUserPoke(newItem)
+
+                return newItem
+            }
         );
     }
 
