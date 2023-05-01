@@ -8,7 +8,7 @@ import { useListState } from "@mantine/hooks";
 import { IUserPoke } from "../@types/poke";
 
 export function Trainer() {
-    const { data } = useQuery('inventory', getInventory)
+    const { data, isLoading } = useQuery('inventory', getInventory)
     const { mutate: syncUserPoke } = useMutation('update-inventory', updateUserPoke)
 
     const [userPokes, handlers] = useListState<IUserPoke>([])
@@ -16,6 +16,11 @@ export function Trainer() {
     useEffect(() => {
         handlers.setState(data ? data.data.userPokes : [])
     }, [data]);
+
+    useEffect(() => {
+        if (isLoading) return;
+        syncUserPoke(userPokes)
+    }, [userPokes]);
     
     const handleDrop = (destPosition: number, item: IUserPoke, isDestStuff: boolean = false) => {
         const sourcePosition = item.position
@@ -24,20 +29,14 @@ export function Trainer() {
             (applyItem) => 
                 (applyItem.position === destPosition && applyItem.isEquipped === isDestStuff)
                 || (applyItem.position === item.position && applyItem.isEquipped === item.isEquipped),
-            (applyItem) => {
-                const newItem = { 
-                    ...applyItem, 
-                    position: applyItem.position === sourcePosition ? destPosition : sourcePosition,
-                    isEquipped: 
-                        applyItem.position === sourcePosition 
-                        && applyItem.isEquipped === item.isEquipped 
-                        ? isDestStuff : item.isEquipped,
-                }
-
-                syncUserPoke(newItem)
-
-                return newItem
-            }
+            (applyItem) => ({ 
+                ...applyItem, 
+                position: applyItem.position === sourcePosition ? destPosition : sourcePosition,
+                isEquipped: 
+                    applyItem.position === sourcePosition 
+                    && applyItem.isEquipped === item.isEquipped 
+                    ? isDestStuff : item.isEquipped,
+            })
         );
     }
 

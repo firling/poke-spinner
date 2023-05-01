@@ -31,7 +31,9 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async updateUserPoke(userPoke: UserPoke): Promise<UserPoke> {
-    return this.userPokesRepository.save(userPoke);
+  async updateUserPoke(userPokes: UserPoke[]): Promise<void> {
+    userPokes.forEach(async (userPoke) => {
+      await this.userPokesRepository.save(userPoke);
+    });
   }
 }

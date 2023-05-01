@@ -15,6 +15,7 @@ export const InventorySlot: FC<InventorySlotProps> = ({inventoryId, handleDrop, 
     const [{ isOver, canDrop }, drop] = useDrop({
       accept: "poke",
       drop(item: IUserPoke) {
+        if (item.position === inventoryId && item.isEquipped === !!isStuff) return;
         handleDrop(inventoryId, item, isStuff)
       },
       collect: monitor => {

@@ -13,6 +13,6 @@ export function getInventory() {
   return axios.get<IUserWithPoke>(`${API_URL}/users/inventory`)
 }
 
-export function updateUserPoke(userPoke: IUserPoke) {
-  return axios.put<IUserWithPoke>(`${API_URL}/users/inventory`, userPoke)
+export function updateUserPoke(userPokes: IUserPoke[]) {
+  return axios.put<IUserWithPoke>(`${API_URL}/users/inventory`, userPokes)
 }
