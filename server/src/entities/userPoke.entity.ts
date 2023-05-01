@@ -13,6 +13,9 @@ export class UserPoke {
     @Column()
     public level: number
 
+    @Column()
+    public position: number
+
     @ManyToOne(() => User, (user) => user.userPokes)
     public user: User
 

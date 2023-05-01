@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { IUserWithPoke } from '../@types/poke'
 
 const API_URL = "http://localhost:3000"
 
@@ -9,5 +10,5 @@ export const REQUEST_PASSWORD_URL = `${API_URL}/forgot_password`
 
 // Server should return AuthModel
 export function getInventory() {
-  return axios.get(`${API_URL}/users/inventory`)
+  return axios.get<IUserWithPoke>(`${API_URL}/users/inventory`)
 }

@@ -1,7 +1,39 @@
 import { Grid, Paper } from "@mantine/core";
 import { Stuff } from "../components/Trainer/Stuff";
+import { Inventory } from "../components/Trainer/Inventory";
+import { useQuery } from "react-query";
+import { getInventory } from "../api/users";
+import { useEffect } from "react";
+import { useListState } from "@mantine/hooks";
+import { IUserPoke } from "../@types/poke";
 
 export function Trainer() {
+    const { data } = useQuery('inventory', getInventory)
+
+    const [userPokes, handlers] = useListState<IUserPoke>([])
+
+    useEffect(() => {
+        handlers.setState(data ? data.data.userPokes : [])
+    }, [data]);
+    
+    const handleDrop = (destPosition: number, item: IUserPoke, isDestStuff: boolean = false) => {
+        const sourcePosition = item.position
+
+        handlers.applyWhere(
+            (applyItem) => 
+                (applyItem.position === destPosition && applyItem.isEquipped === isDestStuff)
+                || (applyItem.position === item.position && applyItem.isEquipped === item.isEquipped),
+            (applyItem) => ({ 
+                ...applyItem, 
+                position: applyItem.position === sourcePosition ? destPosition : sourcePosition,
+                isEquipped: 
+                    applyItem.position === sourcePosition 
+                    && applyItem.isEquipped === item.isEquipped 
+                    ? isDestStuff : item.isEquipped,
+            })
+        );
+    }
+
     return (
         <Paper
           radius="md"
@@ -19,10 +51,16 @@ export function Trainer() {
                     display: 'flex',
                     alignItems: 'center',
                 }}>
-                    <Stuff />
+                    <Stuff 
+                        pokes={userPokes.filter((userPoke) => userPoke.isEquipped)} 
+                        handleDrop={handleDrop}
+                    />
                 </Grid.Col>
                 <Grid.Col span={4}>
-
+                    <Inventory 
+                        pokes={userPokes.filter((userPoke) => !userPoke.isEquipped)} 
+                        handleDrop={handleDrop}
+                    />
                 </Grid.Col>
             </Grid>
         </Paper>

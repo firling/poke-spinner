@@ -1,48 +1,15 @@
-import { FC, useEffect } from 'react';
-import { Grid, Paper, SimpleGrid } from "@mantine/core";
-import { getInventory } from '../../api/users';
-import { useQuery } from 'react-query';
-import { useListState } from '@mantine/hooks';
+import { FC } from 'react';
+import { Grid } from "@mantine/core";
+import { IUserPoke } from '../../@types/poke';
+import { InventorySlot } from './components/InventorySlot';
+import { Item } from './components/Item';
 
-interface PokeSlotProps {
-    pokeId: number
+interface StuffProps {
+    pokes: IUserPoke[]
+    handleDrop: (inventoryId: number, item: IUserPoke, isDestStuff?: boolean) => void
 }
 
-const PokeSlot: FC<PokeSlotProps> = ({pokeId}) => {
-    return (
-        <Paper
-            p="lg"
-            sx={{
-                background: !pokeId ? 'center / contain no-repeat url("/pokeball.png") #fee8b7' : '#fee8b7',
-                height: '30%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}
-        >
-            {pokeId !== null && (
-                <img 
-                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokeId}.svg`} 
-                    style={{
-                        maxWidth: '100%',
-                        maxHeight: '100%',
-                    }}
-                /> 
-            )}
-        </Paper>
-    )
-}
-
-export function Stuff() {
-    const { data } = useQuery('inventory', getInventory)
-
-    const [pokeFions, handlers] = useListState([1, 4, 86, 35, 45, 74]);
-
-    useEffect(() => {
-        if (!data) return;
-        const ids = data.data.userPokes.map((userPoke) => userPoke.poke.pokedexId)
-        handlers.setState([...ids, ...Array.from({length: 6 - ids.length}, () => null)])
-    }, [data]);
+export const Stuff: FC<StuffProps> = ({pokes, handleDrop}) => {
 
     return (
         <Grid gutter={15} sx={{maxHeight: '100%'}}>
@@ -53,9 +20,24 @@ export function Stuff() {
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                 }}>
-                    {pokeFions.slice(0, 3).map((pokeId, i) => (
-                        <PokeSlot key={i} pokeId={pokeId} />
-                    ))}
+                    {[0, 1, 2].map((x) => {
+                        const item = pokes.find(elt => elt.position === x)
+                        return (
+                            <InventorySlot 
+                                key={x} 
+                                inventoryId={x}
+                                isStuff={true}
+                                handleDrop={handleDrop}
+                            >
+                                {item && (
+                                    <Item 
+                                        userPoke={item}
+                                        inventoryId={x}
+                                    />
+                                )}
+                            </InventorySlot>
+                        )
+                    })}
                 </div>
             </Grid.Col>
             <Grid.Col 
@@ -79,9 +61,24 @@ export function Stuff() {
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                 }}>
-                    {pokeFions.slice(3).map((pokeId, i) => (
-                        <PokeSlot key={i} pokeId={pokeId} />
-                    ))}
+                    {[3, 4, 5].map((x) => {
+                        const item = pokes.find(elt => elt.position === x)
+                        return (
+                            <InventorySlot 
+                                key={x} 
+                                inventoryId={x}
+                                isStuff={true}
+                                handleDrop={handleDrop}
+                            >
+                                {item && (
+                                    <Item 
+                                        userPoke={item}
+                                        inventoryId={x}
+                                    />
+                                )}
+                            </InventorySlot>
+                        )
+                    })}
                 </div>
             </Grid.Col>
         </Grid>
