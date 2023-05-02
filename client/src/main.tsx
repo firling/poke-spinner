@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import axios from 'axios'
@@ -8,13 +7,13 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { MantineProvider } from '@mantine/core'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import 'react-tooltip/dist/react-tooltip.css'
 
 const queryClient = new QueryClient()
 
 setupAxios(axios)
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <MantineProvider withGlobalStyles withNormalizeCSS>
@@ -24,5 +23,4 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </MantineProvider>
       </AuthProvider>
     </QueryClientProvider>
-  </React.StrictMode>,
 )
