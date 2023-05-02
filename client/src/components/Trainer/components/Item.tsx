@@ -1,9 +1,8 @@
-import { FC, useEffect } from "react"
+import { FC } from "react"
 import { useDrag, DragPreviewImage } from "react-dnd";
 import { IUserPoke } from "../../../@types/poke";
 import { Tooltip } from 'react-tooltip'
-import { Grid, Text } from "@mantine/core";
-import { getEmptyImage } from "react-dnd-html5-backend";
+import { Grid, Text, Title } from "@mantine/core";
 
 interface ItemProps {
     userPoke: IUserPoke,
@@ -24,10 +23,6 @@ export const Item: FC<ItemProps> = ({userPoke, inventoryId}) => {
     const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${userPoke.poke.pokedexId}.svg`
 
     const calculateStats = (stats: number, level: number) => Math.round(stats * (1 + level/100))
-  
-    useEffect(() => {
-        preview(getEmptyImage(), { captureDraggingState: true });
-    }, []);
 
     return (
         <>
@@ -51,15 +46,26 @@ export const Item: FC<ItemProps> = ({userPoke, inventoryId}) => {
                     }}
                 /> 
 
-                {!isDragging && (
-                    <Tooltip 
+                <Tooltip 
                     id={`tooltip-${inventoryId}`}
                     style={{
                         width: '300px',
                         display: isDragging ? 'none' : 'block',
                     }}
-                    delayHide={0}
                 >
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'end',
+                    }}>
+                        <Title 
+                            order={3} 
+                            sx={{
+                                textShadow: '1px 1px 3px pink',
+                            }}
+                        >{userPoke.poke.name}</Title>
+                        <Text ml="md" color="dimmed">(Niveau: {userPoke.level})</Text>
+                    </div>
                     <Grid justify="center" align="center">
                         <Grid.Col span={5}>
                             <Text>HP: {calculateStats(userPoke.poke.baseHp, userPoke.level)}</Text>
@@ -73,7 +79,6 @@ export const Item: FC<ItemProps> = ({userPoke, inventoryId}) => {
                         </Grid.Col>
                     </Grid>
                 </Tooltip>
-                )}
             </div>
         </>
     )
