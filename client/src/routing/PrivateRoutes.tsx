@@ -2,6 +2,7 @@ import {Route, Routes, Navigate} from 'react-router-dom'
 import { Home } from '../pages/Home'
 import { Layout } from '../components/Layout'
 import { Trainer } from '../pages/Trainer'
+import { Center } from '../pages/Center'
 
 const PrivateRoutes = () => {
 
@@ -13,6 +14,7 @@ const PrivateRoutes = () => {
         {/* Pages */}
         <Route path='/' element={<Home />} />
         <Route path='/trainer' element={<Trainer />} />
+        <Route path='/center' element={<Center />} />
         {/* Page Not Found */}
         <Route path='*' element={<Navigate to='/' />} />
       </Route>
