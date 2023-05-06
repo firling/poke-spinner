@@ -18,9 +18,9 @@ export class PokesController {
 
   @Get('/initialize')
   async initializePokes(): Promise<Poke[]> {
-    const pokeIds = [
-      1, 4, 7, 10, 13, 16, 19, 21, 23, 25, 27, 29, 32, 35, 37, 39, 41, 43, 46,
-    ]
+    const pokeIds = Array.from(Array(152).keys())
+
+    pokeIds.shift()
 
     for (const pokeId of pokeIds) {
       const exists = await this.pokesService.findOneByPokedexId(pokeId)
